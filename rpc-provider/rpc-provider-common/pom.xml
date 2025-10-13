@@ -3,28 +3,23 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.ire</groupId>
-        <artifactId>yrpc</artifactId>
+        <artifactId>rpc-provider</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-test</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>rpc-provider-common</artifactId>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <modules>
-        <module>rpc-test-scanner</module>
-        <module>rpc-test-provider</module>
-    </modules>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <version>3.8.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

@@ -3,19 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.ire</groupId>
-        <artifactId>rpc-test</artifactId>
+        <artifactId>rpc-consumer</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-test-consumer-codec</artifactId>
+    <artifactId>rpc-consumer-common</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.ire</groupId>
-            <artifactId>rpc-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
         <dependency>
             <groupId>com.ire</groupId>
             <artifactId>rpc-codec</artifactId>

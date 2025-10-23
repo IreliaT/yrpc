@@ -16,6 +16,7 @@
 package com.ire.common.server;
 import com.ire.annotation.RpcService;
 import com.ire.common.ClassScanner;
+import com.ire.common.helper.RpcServiceHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,11 @@ public class RpcServiceScanner extends ClassScanner {
                     //优先使用interfaceClass, interfaceClass的name为空，再使用interfaceClassName
                     //TODO 后续逻辑向注册中心注册服务元数据，同时向handlerMap中记录标注了RpcService注解的类实例
                     //handlerMap中的Key先简单存储为host与port，后续根据实际情况处理key
-                    handlerMap.put(host.concat(String.valueOf(port)), clazz.newInstance());
+
+                    String serviceName = getServiceName(rpcService);
+                    String key = RpcServiceHelper.buildServiceKey(serviceName, rpcService.version(), rpcService.group());
+
+                    handlerMap.put(key, clazz.newInstance());
                 }
             } catch (Exception e) {
                 LOGGER.error("scan classes throws exception: {}", e);
@@ -58,4 +63,19 @@ public class RpcServiceScanner extends ClassScanner {
         return handlerMap;
     }
 
+    /**
+     * 获取serviceName
+     */
+    private static String getServiceName(RpcService rpcService){
+        //优先使用interfaceClass
+        Class clazz = rpcService.interfaceClass();
+        if (clazz == void.class){
+            return rpcService.interfaceClassName();
+        }
+        String serviceName = clazz.getName();
+        if (serviceName == null || serviceName.trim().isEmpty()){
+            serviceName = rpcService.interfaceClassName();
+        }
+        return serviceName;
+    }
 }

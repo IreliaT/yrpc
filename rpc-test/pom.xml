@@ -18,6 +18,7 @@
         <module>rpc-test-scanner</module>
         <module>rpc-test-provider</module>
         <module>rpc-test-consumer-codec</module>
+        <module>rpc-test-api</module>
     </modules>
 
     <dependencies>

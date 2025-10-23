@@ -7,19 +7,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-test-provider</artifactId>
+    <artifactId>rpc-test-api</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.ire</groupId>
-            <artifactId>rpc-provider-native</artifactId>
+            <artifactId>rpc-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ire</groupId>
-            <artifactId>rpc-test-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

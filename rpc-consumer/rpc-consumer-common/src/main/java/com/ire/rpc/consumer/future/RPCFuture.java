@@ -3,14 +3,19 @@ package com.ire.rpc.consumer.future;
 import com.ire.proeocol.RpcProtocol;
 import com.ire.proeocol.request.RpcRequest;
 import com.ire.proeocol.response.RpcResponse;
+import com.ire.rpc.consumer.callback.AsyncRPCCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Date 2025/11/27 15:57
@@ -18,6 +23,8 @@ import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 public class RPCFuture extends CompletableFuture<Object> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RPCFuture.class);
 
+    private final List<AsyncRPCCallback> pendingCallback = new ArrayList<>();
+    private final ReentrantLock lock = new ReentrantLock();
     private Sync sync;
     private RpcProtocol<RpcRequest> requestRpcProtocol;
     private RpcProtocol<RpcResponse> responseRpcProtocol;
@@ -75,6 +82,7 @@ public class RPCFuture extends CompletableFuture<Object> {
     public void done(RpcProtocol<RpcResponse> responseRpcProtocol) {
         this.responseRpcProtocol = responseRpcProtocol;
         sync.release(1);
+        invokeCallbacks();
         // Threshold
         long responseTime = System.currentTimeMillis() - startTime;
         if (responseTime > this.responseTimeThreshold) {
@@ -106,6 +114,42 @@ public class RPCFuture extends CompletableFuture<Object> {
         public boolean isDone() {
             getState();
             return getState() == done;
+        }
+    }
+
+    private void runCallback(final AsyncRPCCallback callback){
+        RpcResponse response = this.responseRpcProtocol.getBody();
+        Thread.ofVirtual().start(()->{
+            if (response.isError()){
+                callback.OnException(new RuntimeException("Response Error",new Throwable(response.getError())));
+            }else {
+                callback.onSuccess(response.getResult());
+            }
+        });
+    }
+
+    public RPCFuture addCallback(AsyncRPCCallback callback){
+        lock.lock();
+        try {
+            if (isDone()){
+                runCallback(callback);
+            }else {
+                this.pendingCallback.add(callback);
+            }
+        }finally {
+            lock.unlock();
+        }
+        return this;
+    }
+
+    private void invokeCallbacks() {
+        lock.lock();
+        try {
+            for (final AsyncRPCCallback callback : pendingCallback) {
+                runCallback(callback);
+            }
+        } finally {
+            lock.unlock();
         }
     }
 }

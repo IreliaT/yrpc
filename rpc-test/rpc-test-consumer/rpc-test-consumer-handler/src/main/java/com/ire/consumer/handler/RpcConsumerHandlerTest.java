@@ -4,6 +4,7 @@ import com.ire.proeocol.RpcProtocol;
 import com.ire.proeocol.header.RpcHeaderFactory;
 import com.ire.proeocol.request.RpcRequest;
 import com.ire.rpc.consumer.RpcConsumer;
+import com.ire.rpc.consumer.callback.AsyncRPCCallback;
 import com.ire.rpc.consumer.context.RpcContext;
 import com.ire.rpc.consumer.future.RPCFuture;
 import org.slf4j.Logger;
@@ -15,7 +16,24 @@ import org.slf4j.LoggerFactory;
 public class RpcConsumerHandlerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RpcConsumerHandlerTest.class);
+    
+    public static void main(String[] args) throws Exception {
+        RpcConsumer consumer = RpcConsumer.getInstance();
+        RPCFuture rpcFuture = consumer.sendRequest(getRpcRequestProtocol());
+        rpcFuture.addCallback(new AsyncRPCCallback() {
+            @Override
+            public void onSuccess(Object result) {
+                LOGGER.info("从服务消费者获取到的数据===>>>" + result);
+            }
 
+            @Override
+            public void OnException(Exception e) {
+                LOGGER.info("抛出了异常===>>>" + e);
+            }
+        });
+        Thread.sleep(200);
+    }
+    
     public static void mainOneway(String[] args) throws Exception {
         RpcConsumer consumer = RpcConsumer.getInstance();
         consumer.sendRequest(getRpcRequestProtocol());
@@ -31,7 +49,7 @@ public class RpcConsumerHandlerTest {
         consumer.close();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void mainSync(String[] args) throws Exception {
         RpcConsumer consumer = RpcConsumer.getInstance();
         RPCFuture result = consumer.sendRequest(getRpcRequestProtocolSync());
         LOGGER.info("从服务消费者获取到的数据===>>>" + result.get());
@@ -51,7 +69,7 @@ public class RpcConsumerHandlerTest {
         request.setParameterTypes(new Class[]{String.class});
         request.setVersion("1.0.0");
         request.setAsync(false);
-        request.setOneway(true);
+        request.setOneway(false);
         protocol.setBody(request);
         return protocol;
     }

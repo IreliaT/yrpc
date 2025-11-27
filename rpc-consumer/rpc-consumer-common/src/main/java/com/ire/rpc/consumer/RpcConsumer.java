@@ -2,6 +2,7 @@ package com.ire.rpc.consumer;
 
 import com.ire.proeocol.RpcProtocol;
 import com.ire.proeocol.request.RpcRequest;
+import com.ire.rpc.consumer.future.RPCFuture;
 import com.ire.rpc.consumer.handler.RpcConsumerHandler;
 import com.ire.rpc.consumer.init.RpcConsumerInitializer;
 import io.netty.bootstrap.Bootstrap;
@@ -50,7 +51,7 @@ public class RpcConsumer {
         eventLoopGroup.shutdownGracefully();
     }
 
-    public Object sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
+    public RPCFuture sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
         //TODO 暂时写死，后续在引入注册中心时，从注册中心获取
         String serviceAddress = "127.0.0.1";
         int port = 27880;

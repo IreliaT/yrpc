@@ -4,6 +4,7 @@ import com.ire.proeocol.RpcProtocol;
 import com.ire.proeocol.header.RpcHeaderFactory;
 import com.ire.proeocol.request.RpcRequest;
 import com.ire.rpc.consumer.RpcConsumer;
+import com.ire.rpc.consumer.future.RPCFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,8 +17,8 @@ public class RpcConsumerHandlerTest {
 
     public static void main(String[] args) throws Exception {
         RpcConsumer consumer = RpcConsumer.getInstance();
-        Object result = consumer.sendRequest(getRpcRequestProtocol());
-        LOGGER.info("从服务消费者获取到的数据===>>>" + result.toString());
+        RPCFuture result = consumer.sendRequest(getRpcRequestProtocol());
+        LOGGER.info("从服务消费者获取到的数据===>>>" + result.get());
         Thread.sleep(2000);
         consumer.close();
     }

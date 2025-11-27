@@ -6,7 +6,7 @@ import com.ire.proeocol.header.RpcHeader;
 import com.ire.proeocol.request.RpcRequest;
 import com.ire.proeocol.response.RpcResponse;
 import com.ire.rpc.consumer.context.RpcContext;
-import com.ire.rpc.consumer.future.RPCFuture;
+import com.ire.rpc.proxy.api.future.RPCFuture;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;

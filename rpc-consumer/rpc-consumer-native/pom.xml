@@ -3,22 +3,21 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.ire</groupId>
-        <artifactId>rpc-test</artifactId>
+        <artifactId>rpc-consumer</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-test-consumer</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>rpc-test-consumer-codec</module>
-        <module>rpc-test-consumer-handler</module>
-        <module>rpc-test-consumer-native</module>
-    </modules>
+    <artifactId>rpc-consumer-native</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.ire</groupId>
-            <artifactId>rpc-common</artifactId>
+            <artifactId>rpc-consumer-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

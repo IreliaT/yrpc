@@ -1,12 +1,11 @@
-package com.ire.rpc.consumer.future;
+package com.ire.rpc.proxy.api.future;
 
 import com.ire.proeocol.RpcProtocol;
 import com.ire.proeocol.request.RpcRequest;
 import com.ire.proeocol.response.RpcResponse;
-import com.ire.rpc.consumer.callback.AsyncRPCCallback;
+import com.ire.rpc.proxy.api.callback.AsyncRPCCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.ArrayList;
 import java.util.List;

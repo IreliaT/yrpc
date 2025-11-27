@@ -2,9 +2,10 @@ package com.ire.rpc.consumer;
 
 import com.ire.proeocol.RpcProtocol;
 import com.ire.proeocol.request.RpcRequest;
-import com.ire.rpc.consumer.future.RPCFuture;
 import com.ire.rpc.consumer.handler.RpcConsumerHandler;
 import com.ire.rpc.consumer.init.RpcConsumerInitializer;
+import com.ire.rpc.proxy.api.consumer.Consumer;
+import com.ire.rpc.proxy.api.future.RPCFuture;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -20,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @Date 2025/10/23 18:52
  */
-public class RpcConsumer {
+public class RpcConsumer implements Consumer {
     private final Logger logger = LoggerFactory.getLogger(RpcConsumer.class);
     private final Bootstrap bootstrap;
     private final EventLoopGroup eventLoopGroup;
@@ -51,6 +52,7 @@ public class RpcConsumer {
         eventLoopGroup.shutdownGracefully();
     }
 
+    @Override
     public RPCFuture sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
         //TODO 暂时写死，后续在引入注册中心时，从注册中心获取
         String serviceAddress = "127.0.0.1";

@@ -1,6 +1,6 @@
 package com.ire.rpc.consumer.context;
 
-import com.ire.rpc.consumer.future.RPCFuture;
+import com.ire.rpc.proxy.api.future.RPCFuture;
 
 /**
  * @Date 2025/11/27 17:09

@@ -1,4 +1,4 @@
-package com.ire.rpc.consumer.callback;
+package com.ire.rpc.proxy.api.callback;
 
 /**
  * @Date 2025/11/27 17:23

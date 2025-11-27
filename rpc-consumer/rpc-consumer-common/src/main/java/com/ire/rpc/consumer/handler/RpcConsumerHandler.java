@@ -2,6 +2,7 @@ package com.ire.rpc.consumer.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ire.proeocol.RpcProtocol;
+import com.ire.proeocol.header.RpcHeader;
 import com.ire.proeocol.request.RpcRequest;
 import com.ire.proeocol.response.RpcResponse;
 import io.netty.buffer.Unpooled;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.SocketAddress;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Date 2025/10/23 18:50
@@ -22,6 +25,7 @@ public class RpcConsumerHandler extends SimpleChannelInboundHandler<RpcProtocol<
     private volatile Channel channel;
     private SocketAddress remotePeer;
 
+    private final Map<Long,RpcProtocol<RpcResponse>> pendingResponse = new ConcurrentHashMap<>();
     public Channel getChannel() {
         return channel;
     }
@@ -44,15 +48,29 @@ public class RpcConsumerHandler extends SimpleChannelInboundHandler<RpcProtocol<
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcProtocol<RpcResponse> protocol) throws Exception {
+        if (protocol == null){
+            return;
+        }
         logger.info("服务消费者接收到的数据===>>>{}", JSONObject.toJSONString(protocol));
+        RpcHeader header = protocol.getHeader();
+        long requestId = header.getRequestId();
+        pendingResponse.put(requestId,protocol);
     }
 
     /**
      * 服务消费者向服务提供者发送请求
      */
-    public void sendRequest(RpcProtocol<RpcRequest> protocol){
+    public Object sendRequest(RpcProtocol<RpcRequest> protocol){
         logger.info("服务消费者发送的数据===>>>{}", JSONObject.toJSONString(protocol));
         channel.writeAndFlush(protocol);
+        RpcHeader header = protocol.getHeader();
+        long requestId = header.getRequestId();
+        while (true){
+            RpcProtocol<RpcResponse> responseRpcProtocol = pendingResponse.remove(requestId);
+            if (responseRpcProtocol != null) {
+                return responseRpcProtocol.getBody().getResult();
+            }
+        }
     }
 
     public void close() {

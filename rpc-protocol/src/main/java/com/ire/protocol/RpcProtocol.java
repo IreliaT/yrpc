@@ -1,6 +1,6 @@
-package com.ire.proeocol;
+package com.ire.protocol;
 
-import com.ire.proeocol.header.RpcHeader;
+import com.ire.protocol.header.RpcHeader;
 
 import java.io.Serializable;
 

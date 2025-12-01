@@ -1,8 +1,8 @@
-package com.ire.proeocol.header;
+package com.ire.protocol.header;
 
 import com.ire.common.constants.RpcConstants;
 import com.ire.common.id.IdFactory;
-import com.ire.proeocol.enums.RpcType;
+import com.ire.protocol.enums.RpcType;
 
 /**
  * @Date 2025/10/23 15:09

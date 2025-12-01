@@ -1,4 +1,4 @@
-package com.ire.proeocol.base;
+package com.ire.protocol.base;
 
 import java.io.Serializable;
 

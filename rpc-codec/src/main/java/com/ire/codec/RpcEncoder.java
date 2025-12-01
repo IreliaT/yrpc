@@ -1,8 +1,8 @@
 package com.ire.codec;
 
 import com.ire.common.utils.SerializationUtils;
-import com.ire.proeocol.RpcProtocol;
-import com.ire.proeocol.header.RpcHeader;
+import com.ire.protocol.RpcProtocol;
+import com.ire.protocol.header.RpcHeader;
 import com.ire.serilalization.api.Serialization;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

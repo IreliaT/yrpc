@@ -1,8 +1,8 @@
 package com.ire.rpc.proxy.api.future;
 
-import com.ire.proeocol.RpcProtocol;
-import com.ire.proeocol.request.RpcRequest;
-import com.ire.proeocol.response.RpcResponse;
+import com.ire.protocol.RpcProtocol;
+import com.ire.protocol.request.RpcRequest;
+import com.ire.protocol.response.RpcResponse;
 import com.ire.rpc.proxy.api.callback.AsyncRPCCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

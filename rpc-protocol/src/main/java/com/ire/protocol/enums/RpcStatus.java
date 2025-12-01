@@ -1,4 +1,4 @@
-package com.ire.proeocol.enums;
+package com.ire.protocol.enums;
 
 /**
  * @Date 2025/10/23 16:45

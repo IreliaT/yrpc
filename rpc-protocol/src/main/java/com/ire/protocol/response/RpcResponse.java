@@ -1,6 +1,6 @@
-package com.ire.proeocol.response;
+package com.ire.protocol.response;
 
-import com.ire.proeocol.base.RpcMessage;
+import com.ire.protocol.base.RpcMessage;
 
 /**
  * @Date 2025/10/23 15:08

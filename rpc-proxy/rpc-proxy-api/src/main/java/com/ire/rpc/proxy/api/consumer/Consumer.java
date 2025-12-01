@@ -1,7 +1,7 @@
 package com.ire.rpc.proxy.api.consumer;
 
-import com.ire.proeocol.RpcProtocol;
-import com.ire.proeocol.request.RpcRequest;
+import com.ire.protocol.RpcProtocol;
+import com.ire.protocol.request.RpcRequest;
 import com.ire.rpc.proxy.api.future.RPCFuture;
 
 /**

@@ -1,7 +1,7 @@
 package com.ire.rpc.consumer;
 
-import com.ire.proeocol.RpcProtocol;
-import com.ire.proeocol.request.RpcRequest;
+import com.ire.protocol.RpcProtocol;
+import com.ire.protocol.request.RpcRequest;
 import com.ire.rpc.consumer.handler.RpcConsumerHandler;
 import com.ire.rpc.consumer.init.RpcConsumerInitializer;
 import com.ire.rpc.proxy.api.consumer.Consumer;

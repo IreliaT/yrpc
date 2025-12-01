@@ -1,6 +1,7 @@
 package com.ire.rpc.proxy.api.config;
 
 import com.ire.rpc.proxy.api.consumer.Consumer;
+import com.ire.rpc.registry.api.service.RegistryService;
 
 import java.io.Serializable;
 
@@ -46,10 +47,21 @@ public class ProxyConfig <T> implements Serializable {
      */
     private boolean oneway;
 
+    private RegistryService registryService;
+
+    public RegistryService getRegistryService() {
+        return registryService;
+    }
+
+    public void setRegistryService(RegistryService registryService) {
+        this.registryService = registryService;
+    }
+
     public ProxyConfig() {
     }
 
-    public ProxyConfig(Class<T> clazz, String serviceVersion, String serviceGroup, String serializationType, long timeout, Consumer consumer, boolean async, boolean oneway) {
+    public ProxyConfig(Class<T> clazz, String serviceVersion, String serviceGroup, String serializationType,
+                       long timeout, Consumer consumer, boolean async, boolean oneway, RegistryService registryService) {
         this.clazz = clazz;
         this.serviceVersion = serviceVersion;
         this.serviceGroup = serviceGroup;
@@ -58,6 +70,7 @@ public class ProxyConfig <T> implements Serializable {
         this.serializationType = serializationType;
         this.async = async;
         this.oneway = oneway;
+        this.registryService = registryService;
     }
 
     public Class<T> getClazz() {

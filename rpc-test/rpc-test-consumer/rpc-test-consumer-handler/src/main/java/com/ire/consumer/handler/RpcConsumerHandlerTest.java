@@ -4,9 +4,9 @@ import com.ire.protocol.RpcProtocol;
 import com.ire.protocol.header.RpcHeaderFactory;
 import com.ire.protocol.request.RpcRequest;
 import com.ire.rpc.consumer.RpcConsumer;
-import com.ire.rpc.consumer.callback.AsyncRPCCallback;
 import com.ire.rpc.consumer.context.RpcContext;
-import com.ire.rpc.consumer.future.RPCFuture;
+import com.ire.rpc.proxy.api.callback.AsyncRPCCallback;
+import com.ire.rpc.proxy.api.future.RPCFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

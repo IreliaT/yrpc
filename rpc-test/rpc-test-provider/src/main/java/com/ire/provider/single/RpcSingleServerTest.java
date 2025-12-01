@@ -7,7 +7,9 @@ public class RpcSingleServerTest {
 
     @Test
     public void startRpcSingleServer(){
-        RpcSingleServer singleServer = new RpcSingleServer("127.0.0.1:27880", "com.ire.provider.service","cglib");
+        RpcSingleServer singleServer = new RpcSingleServer("127.0.0.1:27880",
+            "127.0.0.1:2181", "zookeeper",
+            "com.ire", "cglib");
         singleServer.startNettyServer();
     }
 }

@@ -4,6 +4,9 @@ import com.ire.codec.RpcDecoder;
 import com.ire.codec.RpcEncoder;
 import com.ire.rpc.provider.common.handler.RpcProviderHandler;
 import com.ire.rpc.provider.common.server.api.Server;
+import com.ire.rpc.registry.api.config.RegistryConfig;
+import com.ire.rpc.registry.api.service.RegistryService;
+import com.ire.rpc.registry.zookeeper.ZookeeperRegistryService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -12,8 +15,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BaseServer implements Server {
+
+    protected RegistryService registryService;
 
     private final Logger logger = LoggerFactory.getLogger(BaseServer.class);
     //主机域名或者IP地址
@@ -33,13 +36,26 @@ public class BaseServer implements Server {
 
     protected Map<String, Object> handlerMap = new HashMap<>();
 
-    public BaseServer(String address, String reflectType) {
-        if (!StringUtils.isEmpty(address)) {
-            String[] serverAddress = address.split(":");
-            this.host = serverAddress[0];
-            this.port = Integer.parseInt(serverAddress[1]);
+    public BaseServer(String serverAddress, String registryAddress, String registryType, String reflectType){
+        if (!StringUtils.isEmpty(serverAddress)){
+            String[] serverArray = serverAddress.split(":");
+            this.host = serverArray[0];
+            this.port = Integer.parseInt(serverArray[1]);
         }
         this.reflectType = reflectType;
+        this.registryService = this.getRegistryService(registryAddress, registryType);
+    }
+
+    private RegistryService getRegistryService(String registryAddress, String registryType) {
+        //TODO 后续扩展支持SPI
+        RegistryService registryService = null;
+        try {
+            registryService = new ZookeeperRegistryService();
+            registryService.init(new RegistryConfig(registryAddress, registryType));
+        }catch (Exception e){
+            logger.error("RPC Server init error", e);
+        }
+        return registryService;
     }
 
     @Override

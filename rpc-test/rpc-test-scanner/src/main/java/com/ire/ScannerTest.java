@@ -2,7 +2,6 @@ package com.ire;
 
 import com.ire.common.ClassScanner;
 import com.ire.common.reference.RpcReferenceScanner;
-import com.ire.common.server.RpcServiceScanner;
 import org.junit.Test;
 
 import java.util.List;

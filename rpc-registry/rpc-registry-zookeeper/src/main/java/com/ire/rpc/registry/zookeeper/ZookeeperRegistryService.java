@@ -2,6 +2,8 @@ package com.ire.rpc.registry.zookeeper;
 
 import com.ire.common.helper.RpcServiceHelper;
 import com.ire.protocol.meta.ServiceMeta;
+import com.ire.rpc.loadbalancer.random.RandomServiceLoadBalancer;
+import com.ire.rpc.loadbalancer.random.ServiceLoadBalancer;
 import com.ire.rpc.registry.api.config.RegistryConfig;
 import com.ire.rpc.registry.api.service.RegistryService;
 import org.apache.curator.framework.CuratorFramework;
@@ -28,6 +30,8 @@ public class ZookeeperRegistryService implements RegistryService {
 
     private ServiceDiscovery<ServiceMeta> serviceDiscovery;
 
+    private ServiceLoadBalancer<ServiceInstance<ServiceMeta>> serviceLoadBalancer;
+
     @Override
     public void init(RegistryConfig registryConfig) throws Exception {
         CuratorFramework client = CuratorFrameworkFactory.newClient(registryConfig.getRegistryAddr(), new ExponentialBackoffRetry(BASE_SLEEP_TIME_MS, MAX_RETRIES));
@@ -39,6 +43,9 @@ public class ZookeeperRegistryService implements RegistryService {
             .basePath(ZK_BASE_PATH)
             .build();
         this.serviceDiscovery.start();
+
+        //TODO 默认创建基于随机算法的负载均衡策略，后续基于SPI扩展
+        this.serviceLoadBalancer = new RandomServiceLoadBalancer<>();
     }
 
     @Override
@@ -68,22 +75,14 @@ public class ZookeeperRegistryService implements RegistryService {
     @Override
     public ServiceMeta discovery(String serviceName, int invokerHashCode) throws Exception {
         Collection<ServiceInstance<ServiceMeta>> serviceInstances = serviceDiscovery.queryForInstances(serviceName);
-        ServiceInstance<ServiceMeta> instance = this.selectOneServiceInstance((List<ServiceInstance<ServiceMeta>>) serviceInstances);
+        ServiceInstance<ServiceMeta> instance = serviceLoadBalancer.select(
+            (List<ServiceInstance<ServiceMeta>>)serviceInstances,invokerHashCode);
         if (instance != null) {
             return instance.getPayload();
         }
         return null;
     }
 
-    //随机挑选一个
-    private ServiceInstance<ServiceMeta> selectOneServiceInstance(List<ServiceInstance<ServiceMeta>> serviceInstances){
-        if (serviceInstances == null || serviceInstances.isEmpty()){
-            return null;
-        }
-        Random random = new Random();
-        int index = random.nextInt(serviceInstances.size());
-        return serviceInstances.get(index);
-    }
 
     @Override
     public void destroy() throws IOException {

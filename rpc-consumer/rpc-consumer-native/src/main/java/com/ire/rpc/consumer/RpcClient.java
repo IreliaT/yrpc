@@ -9,6 +9,7 @@ import com.ire.rpc.proxy.jdk.JdkProxyFactory;
 import com.ire.rpc.registry.api.config.RegistryConfig;
 import com.ire.rpc.registry.api.service.RegistryService;
 import com.ire.rpc.registry.zookeeper.ZookeeperRegistryService;
+import com.ire.rpc.spi.loader.ExtensionLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -34,7 +35,10 @@ public class RpcClient {
      * 超时时间
      */
     private long timeout;
-
+    /**
+     * 代理
+     */
+    private String proxy;
     /**
      * 是否异步调用
      */
@@ -47,7 +51,8 @@ public class RpcClient {
 
     private RegistryService registryService;
 
-    public RpcClient(String registryAddress, String registryType, String serviceVersion, String serviceGroup, String serializationType, long timeout, boolean async, boolean oneway) {
+    public RpcClient(String proxy, String registryAddress, String registryType, String serviceVersion, String serviceGroup, String serializationType, long timeout, boolean async, boolean oneway) {
+        this.proxy = proxy;
         this.serviceVersion = serviceVersion;
         this.timeout = timeout;
         this.serviceGroup = serviceGroup;
@@ -72,7 +77,7 @@ public class RpcClient {
         return registryService;
     }
     public <T> T create(Class<T> interfaceClass) {
-        ProxyFactory proxyFactory = new JdkProxyFactory<>();
+        ProxyFactory proxyFactory = ExtensionLoader.getExtension(ProxyFactory.class, proxy);
         proxyFactory.init(new ProxyConfig<>(interfaceClass, serviceVersion, serviceGroup, serializationType,timeout,
             RpcConsumer.getInstance(), async, oneway,registryService));
         return proxyFactory.getProxy(interfaceClass);

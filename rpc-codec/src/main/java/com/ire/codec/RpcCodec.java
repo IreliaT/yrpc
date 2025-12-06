@@ -1,5 +1,6 @@
 package com.ire.codec;
 
+import com.ire.rpc.spi.loader.ExtensionLoader;
 import com.ire.serilalization.api.Serialization;
 import com.ire.serilalization.jdk.JdkSerialization;
 
@@ -8,7 +9,7 @@ import com.ire.serilalization.jdk.JdkSerialization;
  */
 public interface RpcCodec {
 
-    default Serialization getJdkSerialization(){
-        return new JdkSerialization();
+    default Serialization getSerialization(String serializationType){
+        return ExtensionLoader.getExtension(Serialization.class,serializationType);
     }
 }

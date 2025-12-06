@@ -15,8 +15,10 @@
  */
 package com.ire.serilalization.api;
 
+import com.ire.common.constants.RpcConstants;
+import com.ire.rpc.spi.annotation.SPI;
 
-
+@SPI(RpcConstants.SERIALIZATION_JDK)
 public interface Serialization {
 
     /**

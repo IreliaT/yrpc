@@ -102,4 +102,10 @@ public class RpcConsumerHandler extends SimpleChannelInboundHandler<RpcProtocol<
     public void close() {
         channel.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
     }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        logger.error("RpcConsumerHandler 捕获到异常", cause);
+        ctx.close();
+    }
 }
